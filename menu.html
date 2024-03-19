@@ -1,69 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRUD de Platos</title>
+<title>Menú Chileno</title>
 <style>
-    /* Estilos CSS */
+    body {
+        background-color: #fff;
+        color: #000;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #000;
+        background-color: #fff;
+        color: #000;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .menu-category {
+        margin-bottom: 20px;
+    }
+    .menu-item {
+        margin-bottom: 10px;
+    }
+    .item-name {
+        font-weight: bold;
+    }
+    .item-description {
+        color: #666;
+    }
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>Menú</h2>
-    <!-- Contenedor para mostrar los platos del menú -->
-    <div id="menu"></div>
-    <!-- Formulario para agregar nuevos platos -->
-    <form id="form">
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" required>
-        <label for="price">Precio:</label>
-        <input type="number" id="price" step="0.01" required>
-        <button type="submit">Agregar Plato</button>
-    </form>
+    <h2>Menú Chileno</h2>
+    
+    <!-- Sección de Platos Típicos Chilenos -->
+    <div class="menu-category">
+        <h3>Platos Típicos Chilenos</h3>
+        <!-- Item de Empanadas -->
+        <div class="menu-item">
+            <span class="item-name">Empanadas</span>
+            <span class="item-description">Empanadas de pino, queso, mariscos, etc.</span>
+        </div>
+        <!-- Item de Pastel de Choclo -->
+        <div class="menu-item">
+            <span class="item-name">Pastel de Choclo</span>
+            <span class="item-description">Pastel de maíz con carne, cebolla, huevo, aceitunas y pasas.</span>
+        </div>
+        <!-- Item de Cazuela -->
+        <div class="menu-item">
+            <span class="item-name">Cazuela</span>
+            <span class="item-description">Plato de carne (pollo, vacuno o cordero) con verduras y maíz.</span>
+        </div>
+    </div>
+    
+    <!-- Sección de Cervezas de Buena Calidad -->
+    <div class="menu-category">
+        <h3>Cervezas de Buena Calidad</h3>
+        <!-- Item de Kross -->
+        <div class="menu-item">
+            <span class="item-name">Kross</span>
+            <span class="item-description">Cerveza artesanal chilena.</span>
+        </div>
+        <!-- Item de Guayacán -->
+        <div class="menu-item">
+            <span class="item-name">Guayacán</span>
+            <span class="item-description">Cerveza artesanal de La Serena.</span>
+        </div>
+        <!-- Item de Cuello Negro -->
+        <div class="menu-item">
+            <span class="item-name">Cuello Negro</span>
+            <span class="item-description">Cerveza artesanal de la Patagonia chilena.</span>
+        </div>
+    </div>
 </div>
-
-<script>
-    // Función para mostrar los platos del menú
-    function displayMenu() {
-        // Obtener los platos del almacenamiento local o inicializar un array vacío
-        const menu = JSON.parse(localStorage.getItem('menu')) || [];
-        const menuContainer = document.getElementById('menu');
-        menuContainer.innerHTML = '';
-        // Iterar sobre cada plato y crear un elemento HTML para mostrarlo en el menú
-        menu.forEach(item => {
-            const menuItem = document.createElement('div');
-            menuItem.className = 'menu-item';
-            menuItem.innerHTML = `
-                <span class="item-name">${item.name}</span>
-                <span class="item-price">$${item.price.toFixed(2)}</span>
-            `;
-            menuContainer.appendChild(menuItem);
-        });
-    }
-
-    // Agregar un nuevo plato al menú
-    document.getElementById('form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        // Obtener el nombre y precio del formulario
-        const name = document.getElementById('name').value;
-        const price = parseFloat(document.getElementById('price').value);
-        // Crear un nuevo objeto de plato
-        const newItem = { name, price };
-        // Obtener el menú actual del almacenamiento local o inicializar un array vacío
-        let menu = JSON.parse(localStorage.getItem('menu')) || [];
-        // Agregar el nuevo plato al menú
-        menu.push(newItem);
-        // Guardar el menú actualizado en el almacenamiento local
-        localStorage.setItem('menu', JSON.stringify(menu));
-        // Volver a mostrar el menú con el nuevo plato
-        displayMenu();
-        // Limpiar el formulario
-        document.getElementById('form').reset();
-    });
-
-    // Mostrar el menú al cargar la página
-    displayMenu();
-</script>
 </body>
 </html>
