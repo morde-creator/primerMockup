@@ -3,136 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menú Chileno - CRUD</title>
+<title>Menú Chileno</title>
 <style>
-    body {
-        background-color: #fff;
-        color: #000;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-    .container {
-        max-width: 800px;
-        margin: 50px auto;
-        padding: 20px;
-        border: 1px solid #000;
-        background-color: #fff;
-        color: #000;
-    }
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .menu-item {
-        margin-bottom: 10px;
-    }
-    .item-name {
-        font-weight: bold;
-    }
-    .item-description {
-        color: #666;
-    }
-    .btn {
-        display: inline-block;
-        padding: 5px 10px;
-        margin-left: 10px;
-        background-color: #000;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-    .btn:hover {
-        background-color: #333;
-    }
+    /* Estilos CSS aquí */
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>Menú Chileno - CRUD</h2>
+    <h2>Menú Chileno</h2>
 
-    <!-- Lista de Platos Típicos Chilenos y Cervezas -->
-    <div id="menu">
-        <!-- Los elementos se añadirán aquí dinámicamente -->
-    </div>
+    <!-- Lista de platos agregados al carrito -->
+    <h3>Platos en el carrito:</h3>
+    <ul id="cart"></ul>
 
-    <!-- Formulario para Agregar o Editar -->
+    <!-- Formulario para Agregar al carrito -->
+    <h3>Agregar al carrito:</h3>
     <form id="form">
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" required>
-        <label for="description">Descripción:</label>
-        <input type="text" id="description">
-        <button type="submit" id="submit">Agregar</button>
-        <button type="button" id="cancel">Cancelar</button>
+        <!-- Menú desplegable para elegir un elemento -->
+        <select id="select-menu">
+            <!-- Comidas típicas chilenas -->
+            <option value="Empanadas">Empanadas</option>
+            <option value="Pastel de choclo">Pastel de choclo</option>
+            <option value="Cazuela">Cazuela</option>
+            <option value="Curanto">Curanto</option>
+            <option value="Asado">Asado</option>
+            <option value="Humitas">Humitas</option>
+            <option value="Charquicán">Charquicán</option>
+        </select>
+        <button type="button" id="addToCartBtn" onclick="addToCart()">Agregar al carrito</button>
     </form>
 
+    <!-- Botón para eliminar platos del carrito -->
+    <h3>Eliminar platos del carrito:</h3>
+    <ul id="cartToDelete"></ul>
+    <button type="button" id="deleteBtn" onclick="deleteFromCart()">Eliminar plato</button>
 </div>
 
-<script>
-    // Función para mostrar los elementos en el menú
-    function displayMenu() {
-        const menu = JSON.parse(localStorage.getItem('menu')) || [];
-        const menuContainer = document.getElementById('menu');
-        menuContainer.innerHTML = '';
-        menu.forEach((item, index) => {
-            const menuItem = document.createElement('div');
-            menuItem.className = 'menu-item';
-            menuItem.innerHTML = `
-                <span class="item-name">${item.name}</span>
-                <span class="item-description">${item.description}</span>
-                <a href="#" class="btn" data-index="${index}" onclick="editItem(event)">Editar</a>
-                <a href="#" class="btn" data-index="${index}" onclick="deleteItem(event)">Eliminar</a>
-            `;
-            menuContainer.appendChild(menuItem);
-        });
-    }
-
-    // Función para añadir o editar un elemento
-    document.getElementById('form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const name = document.getElementById('name').value;
-        const description = document.getElementById('description').value;
-        const newItem = { name, description };
-        const index = document.getElementById('submit').getAttribute('data-index');
-        let menu = JSON.parse(localStorage.getItem('menu')) || [];
-        if (index !== null) {
-            // Editar un elemento existente
-            menu[index] = newItem;
-        } else {
-            // Añadir un nuevo elemento
-            menu.push(newItem);
-        }
-        localStorage.setItem('menu', JSON.stringify(menu));
-        displayMenu();
-        document.getElementById('form').reset();
-        document.getElementById('submit').removeAttribute('data-index');
-        document.getElementById('submit').textContent = 'Agregar';
-    });
-
-    // Función para editar un elemento
-    function editItem(event) {
-        event.preventDefault();
-        const index = event.target.getAttribute('data-index');
-        const item = JSON.parse(localStorage.getItem('menu'))[index];
-        document.getElementById('name').value = item.name;
-        document.getElementById('description').value = item.description;
-        document.getElementById('submit').setAttribute('data-index', index);
-        document.getElementById('submit').textContent = 'Editar';
-    }
-
-    // Función para eliminar un elemento
-    function deleteItem(event) {
-        event.preventDefault();
-        const index = event.target.getAttribute('data-index');
-        let menu = JSON.parse(localStorage.getItem('menu'));
-        menu.splice(index, 1);
-        localStorage.setItem('menu', JSON.stringify(menu));
-        displayMenu();
-    }
-
-    // Mostrar el menú al cargar la página
-    displayMenu();
-</script>
+<!-- Enlace al archivo CRUD -->
+<script src="/js/crud.js"></script>
 </body>
 </html>
