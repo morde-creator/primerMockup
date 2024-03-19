@@ -3,67 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menú</title>
+<title>CRUD de Platos</title>
 <style>
-    body {
-        background-color: #fff;
-        color: #000;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-    .container {
-        max-width: 800px;
-        margin: 50px auto;
-        padding: 20px;
-        border: 1px solid #000;
-        background-color: #fff;
-        color: #000;
-    }
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .menu-item {
-        margin-bottom: 20px;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 10px;
-    }
-    .menu-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-    .item-name {
-        font-weight: bold;
-    }
-    .item-price {
-        float: right;
-    }
+    /* Estilos CSS */
 </style>
 </head>
 <body>
 <div class="container">
     <h2>Menú</h2>
-    <div class="menu-item">
-        <span class="item-name">Hamburguesa Clásica</span>
-        <span class="item-price">$10.99</span>
-    </div>
-    <div class="menu-item">
-        <span class="item-name">Ensalada César</span>
-        <span class="item-price">$8.99</span>
-    </div>
-    <div class="menu-item">
-        <span class="item-name">Pizza Margherita</span>
-        <span class="item-price">$12.99</span>
-    </div>
-    <div class="menu-item">
-        <span class="item-name">Pasta Alfredo</span>
-        <span class="item-price">$11.99</span>
-    </div>
-    <div class="menu-item">
-        <span class="item-name">Sándwich de Pollo</span>
-        <span class="item-price">$9.99</span>
-    </div>
+    <!-- Contenedor para mostrar los platos del menú -->
+    <div id="menu"></div>
+    <!-- Formulario para agregar nuevos platos -->
+    <form id="form">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" required>
+        <label for="price">Precio:</label>
+        <input type="number" id="price" step="0.01" required>
+        <button type="submit">Agregar Plato</button>
+    </form>
 </div>
+
+<script>
+    // Función para mostrar los platos del menú
+    function displayMenu() {
+        // Obtener los platos del almacenamiento local o inicializar un array vacío
+        const menu = JSON.parse(localStorage.getItem('menu')) || [];
+        const menuContainer = document.getElementById('menu');
+        menuContainer.innerHTML = '';
+        // Iterar sobre cada plato y crear un elemento HTML para mostrarlo en el menú
+        menu.forEach(item => {
+            const menuItem = document.createElement('div');
+            menuItem.className = 'menu-item';
+            menuItem.innerHTML = `
+                <span class="item-name">${item.name}</span>
+                <span class="item-price">$${item.price.toFixed(2)}</span>
+            `;
+            menuContainer.appendChild(menuItem);
+        });
+    }
+
+    // Agregar un nuevo plato al menú
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Obtener el nombre y precio del formulario
+        const name = document.getElementById('name').value;
+        const price = parseFloat(document.getElementById('price').value);
+        // Crear un nuevo objeto de plato
+        const newItem = { name, price };
+        // Obtener el menú actual del almacenamiento local o inicializar un array vacío
+        let menu = JSON.parse(localStorage.getItem('menu')) || [];
+        // Agregar el nuevo plato al menú
+        menu.push(newItem);
+        // Guardar el menú actualizado en el almacenamiento local
+        localStorage.setItem('menu', JSON.stringify(menu));
+        // Volver a mostrar el menú con el nuevo plato
+        displayMenu();
+        // Limpiar el formulario
+        document.getElementById('form').reset();
+    });
+
+    // Mostrar el menú al cargar la página
+    displayMenu();
+</script>
 </body>
 </html>
