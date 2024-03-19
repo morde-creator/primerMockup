@@ -15,35 +15,13 @@ function removeFromCart(index) {
     updateCart();
 }
 
-// Función para eliminar un plato del carrito
-function deleteFromCart() {
-    const select = document.getElementById('cartToDelete');
-    const selectedIndex = select.selectedIndex;
-    if (selectedIndex !== -1) {
-        cartItems.splice(selectedIndex, 1);
-        updateCart();
-    }
-}
-
-// Función para actualizar la lista de platos en el carrito
-function updateCart() {
+// Función para listar platos agregados al carro
+function listCartItems() {
     const cartList = document.getElementById('cart');
     cartList.innerHTML = '';
-    cartItems.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        const removeBtn = document.createElement('button');
-        removeBtn.textContent = 'Eliminar';
-        removeBtn.onclick = () => removeFromCart(index);
-        li.appendChild(removeBtn);
-        cartList.appendChild(li);
-    });
-
-    const cartToDelete = document.getElementById('cartToDelete');
-    cartToDelete.innerHTML = '';
     cartItems.forEach(item => {
         const li = document.createElement('li');
         li.textContent = item;
-        cartToDelete.appendChild(li);
+        cartList.appendChild(li);
     });
 }
