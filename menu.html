@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menú Chileno</title>
+<title>Menú Chileno - CRUD</title>
 <style>
     body {
         background-color: #fff;
@@ -24,9 +24,6 @@
         text-align: center;
         margin-bottom: 20px;
     }
-    .menu-category {
-        margin-bottom: 20px;
-    }
     .menu-item {
         margin-bottom: 10px;
     }
@@ -36,51 +33,106 @@
     .item-description {
         color: #666;
     }
+    .btn {
+        display: inline-block;
+        padding: 5px 10px;
+        margin-left: 10px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #333;
+    }
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>Menú Chileno</h2>
-    
-    <!-- Sección de Platos Típicos Chilenos -->
-    <div class="menu-category">
-        <h3>Platos Típicos Chilenos</h3>
-        <!-- Item de Empanadas -->
-        <div class="menu-item">
-            <span class="item-name">Empanadas</span>
-            <span class="item-description">Empanadas de pino, queso, mariscos, etc.</span>
-        </div>
-        <!-- Item de Pastel de Choclo -->
-        <div class="menu-item">
-            <span class="item-name">Pastel de Choclo</span>
-            <span class="item-description">Pastel de maíz con carne, cebolla, huevo, aceitunas y pasas.</span>
-        </div>
-        <!-- Item de Cazuela -->
-        <div class="menu-item">
-            <span class="item-name">Cazuela</span>
-            <span class="item-description">Plato de carne (pollo, vacuno o cordero) con verduras y maíz.</span>
-        </div>
+    <h2>Menú Chileno - CRUD</h2>
+
+    <!-- Lista de Platos Típicos Chilenos y Cervezas -->
+    <div id="menu">
+        <!-- Los elementos se añadirán aquí dinámicamente -->
     </div>
-    
-    <!-- Sección de Cervezas de Buena Calidad -->
-    <div class="menu-category">
-        <h3>Cervezas de Buena Calidad</h3>
-        <!-- Item de Kross -->
-        <div class="menu-item">
-            <span class="item-name">Kross</span>
-            <span class="item-description">Cerveza artesanal chilena.</span>
-        </div>
-        <!-- Item de Guayacán -->
-        <div class="menu-item">
-            <span class="item-name">Guayacán</span>
-            <span class="item-description">Cerveza artesanal de La Serena.</span>
-        </div>
-        <!-- Item de Cuello Negro -->
-        <div class="menu-item">
-            <span class="item-name">Cuello Negro</span>
-            <span class="item-description">Cerveza artesanal de la Patagonia chilena.</span>
-        </div>
-    </div>
+
+    <!-- Formulario para Agregar o Editar -->
+    <form id="form">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" required>
+        <label for="description">Descripción:</label>
+        <input type="text" id="description">
+        <button type="submit" id="submit">Agregar</button>
+        <button type="button" id="cancel">Cancelar</button>
+    </form>
+
 </div>
+
+<script>
+    // Función para mostrar los elementos en el menú
+    function displayMenu() {
+        const menu = JSON.parse(localStorage.getItem('menu')) || [];
+        const menuContainer = document.getElementById('menu');
+        menuContainer.innerHTML = '';
+        menu.forEach((item, index) => {
+            const menuItem = document.createElement('div');
+            menuItem.className = 'menu-item';
+            menuItem.innerHTML = `
+                <span class="item-name">${item.name}</span>
+                <span class="item-description">${item.description}</span>
+                <a href="#" class="btn" data-index="${index}" onclick="editItem(event)">Editar</a>
+                <a href="#" class="btn" data-index="${index}" onclick="deleteItem(event)">Eliminar</a>
+            `;
+            menuContainer.appendChild(menuItem);
+        });
+    }
+
+    // Función para añadir o editar un elemento
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value;
+        const description = document.getElementById('description').value;
+        const newItem = { name, description };
+        const index = document.getElementById('submit').getAttribute('data-index');
+        let menu = JSON.parse(localStorage.getItem('menu')) || [];
+        if (index !== null) {
+            // Editar un elemento existente
+            menu[index] = newItem;
+        } else {
+            // Añadir un nuevo elemento
+            menu.push(newItem);
+        }
+        localStorage.setItem('menu', JSON.stringify(menu));
+        displayMenu();
+        document.getElementById('form').reset();
+        document.getElementById('submit').removeAttribute('data-index');
+        document.getElementById('submit').textContent = 'Agregar';
+    });
+
+    // Función para editar un elemento
+    function editItem(event) {
+        event.preventDefault();
+        const index = event.target.getAttribute('data-index');
+        const item = JSON.parse(localStorage.getItem('menu'))[index];
+        document.getElementById('name').value = item.name;
+        document.getElementById('description').value = item.description;
+        document.getElementById('submit').setAttribute('data-index', index);
+        document.getElementById('submit').textContent = 'Editar';
+    }
+
+    // Función para eliminar un elemento
+    function deleteItem(event) {
+        event.preventDefault();
+        const index = event.target.getAttribute('data-index');
+        let menu = JSON.parse(localStorage.getItem('menu'));
+        menu.splice(index, 1);
+        localStorage.setItem('menu', JSON.stringify(menu));
+        displayMenu();
+    }
+
+    // Mostrar el menú al cargar la página
+    displayMenu();
+</script>
 </body>
 </html>
